@@ -12,7 +12,7 @@ DATASET="15Scene-Prod-0"
 #DATASET="Flowers-Prod-1"
 
 # Set the frequency threshold you want to test
-for iFreq in 80
+for iFreq in 60
 do
   # Loop to process all folds
   for iFold in 0 #1 2 3 4 5 6 7 8 9
@@ -57,16 +57,19 @@ do
         ./bin/grima2D -hi -T $TIMEOUT -f $iFreq -o $OUT $TRAIN_FILE
       fi
 
+      # Check that pattern file exist to be sure and output the number of
+      # pattern for information
       if [[ -e $PAT_FILE ]]
       then
         NB_PAT=$( head -5 "$PAT_FILE" | grep NbFreqPattern | cut -d: -f2 )
         echo "NB PAT : $NB_PAT"
+        # If train histograms does not exist, then count pattern in train set
         if ! [[ -e $TRAIN_CSV_FILE ]]
         then
           echo "./bin/countPattern2D -DW -O 0 -p $PAT_FILE -c $TRAIN_CSV_FILE -l $TRAIN_LBL_FILE $TRAIN_FILE"
           ./bin/countPattern2D -DW -O 0 -p $PAT_FILE -c $TRAIN_CSV_FILE -l $TRAIN_LBL_FILE $TRAIN_FILE
         fi
-
+        # If test histograms does not exist, then count pattern in train set
         if ! [[ -e $TEST_CSV_FILE ]]
         then
           echo "./bin/countPattern2D -DW -O 0 -p $PAT_FILE -c $TEST_CSV_FILE -l $TEST_LBL_FILE $TEST_FILE"
@@ -74,6 +77,7 @@ do
         fi
       fi
 
+      # If results file does not exist, run classification task
       if ! [[ -e ${RES_FILE} ]]
       then
         cd bin
