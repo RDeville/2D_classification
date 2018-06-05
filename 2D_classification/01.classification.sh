@@ -20,6 +20,15 @@ do
     # Loop to process all vocabulary size
     for iWords in 100 #250 500 750 1000 1250 1500 1750 2000 4000
     do
+      ## !!!! EXCEPT for the iFold loop, the other ones are not especially
+      # needed as you will probably test with the parameter we present in our
+      # paper. The loop here were used to test multiple frequency threshold and
+      # multiple vocabulary size in once script.
+      # I think it will be better for you to copy this script for each set of
+      # parameter we present in our article and run them individually (or with
+      # a "master" script) in order to not loose to much time by testing every
+      # possible set of parameter as we did.
+
       # Directory where graphs files are, comment out the one not need for the
       # dataset
       DIR="${SCRIPT}/data/${DATASET}/Folds${iFold}/train100-test50/Dense-step8-SIFT-binSize4-patchSize16-${iWords}Words"
@@ -78,11 +87,12 @@ do
       fi
 
       # If results file does not exist, run classification task
+
       if ! [[ -e ${RES_FILE} ]]
       then
         cd bin
-        echo "octave --eval \"classif_multiClass('$TRAIN_CSV_FILE','$TRAIN_LBL_FILE','$TEST_CSV_FILE','$TEST_LBL_FILE','$OUT', '.all' );\""
-        octave --eval "classif_multiClass('$TRAIN_CSV_FILE','$TRAIN_LBL_FILE','$TEST_CSV_FILE','$TEST_LBL_FILE','$OUT', '.all' );"
+        echo "octave --eval \"classif_multiClass('$TRAIN_CSV_FILE','$TRAIN_LBL_FILE','$TEST_CSV_FILE','$TEST_LBL_FILE','$OUT', '${iFreq}' );\""
+        octave --eval "classif_multiClass('$TRAIN_CSV_FILE','$TRAIN_LBL_FILE','$TEST_CSV_FILE','$TEST_LBL_FILE','$OUT', '${iFreq}' );"
         cd "$SCRIPT"
       fi
     done
