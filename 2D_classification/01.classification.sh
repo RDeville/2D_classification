@@ -57,7 +57,7 @@ do
       PAT_FILE="${OUT}/pattern.gri"
 
       # Results file
-      RES_FILE="${OUT}/classif_res.${iFreq}.csv"
+      RES_FILE="${OUT}/classifResult${iFreq}.csv"
 
       # If pattern file does not exit process mining
       if ! [[ -e $PAT_FILE ]]
@@ -94,7 +94,10 @@ do
         echo "octave --eval \"classif_multiClass('$TRAIN_CSV_FILE','$TRAIN_LBL_FILE','$TEST_CSV_FILE','$TEST_LBL_FILE','$OUT', '${iFreq}' );\""
         octave --eval "classif_multiClass('$TRAIN_CSV_FILE','$TRAIN_LBL_FILE','$TEST_CSV_FILE','$TEST_LBL_FILE','$OUT', '${iFreq}' );"
         cd "$SCRIPT"
+      else
+        cat $RES_FILE
       fi
+
     done
   done
 done
